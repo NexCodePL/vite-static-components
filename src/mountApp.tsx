@@ -3,7 +3,7 @@
 import React from "react";
 import ReactDOMServer from "react-dom/server";
 import ReactDOM from "react-dom/client";
-import { StaticRouter } from "react-router-dom/server";
+import { StaticRouter } from "react-router-dom/server.js";
 import { BrowserRouter } from "react-router-dom";
 
 import {
