@@ -437,10 +437,10 @@
   dependencies:
     react "^18.2.0"
 
-"@nexcodepl/vite-static@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@nexcodepl/vite-static/-/vite-static-1.0.1.tgz#7e4c6d49206dc1b4b7e6d1290cfe1df202cb3e05"
-  integrity sha512-BgVHjuD3NHFU7rVQzvIqXiSzzdE7nELuFRURnmluJJ2tQ4kFUXnaB3QRDxk21zdVrUSw8vWkpjSp/tCgRrqfEQ==
+"@nexcodepl/vite-static@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@nexcodepl/vite-static/-/vite-static-1.0.3.tgz#c42a16ac171f4cabcd15f34adcac4d333fdb6d7e"
+  integrity sha512-ewgl1TknRi3ndN4v2XETc1EYTMslLbJct+IXGuwAG925uWC0uAISUfoZckC4aSYaNrskBdiaBlwlt864klCrSA==
   dependencies:
     "@nexcodepl/fs" "^1.0.0"
     "@vitejs/plugin-react" "^3.1.0"

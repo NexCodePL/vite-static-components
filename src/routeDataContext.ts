@@ -1,5 +1,5 @@
 import { useStore, Store, useStoreState } from "@nexcodepl/react-store";
-import { StaticRouteBase, StaticRouteBaseGetData } from "@nexcodepl/vite-static";
+import { StaticRouteBase, RouteData } from "@nexcodepl/vite-static";
 import { createContext, useContext } from "react";
 
 export interface RouteDataContextType<
@@ -11,15 +11,15 @@ export interface RouteDataContextType<
     route: TStaticRoute;
     routes: TStaticRoute[];
     routesMap: Record<string, TStaticRoute>;
-    routeDataStore: Store<StaticRouteBaseGetData<TRoute> | null>;
-    routeData: StaticRouteBaseGetData<TRoute>;
+    routeDataStore: Store<RouteData<TRoute> | null>;
+    routeData: RouteData<TRoute>;
 }
 
 interface Props<TStaticRoute extends StaticRouteBase<any, any>, TGlobalData, TRoute extends StaticRouteBase<any, any>> {
     globalData: TGlobalData;
     route: TStaticRoute;
     routes: TStaticRoute[];
-    routeData: StaticRouteBaseGetData<TRoute> | null;
+    routeData: RouteData<TRoute> | null;
 }
 
 export function useRouteDataContext<
@@ -32,7 +32,7 @@ export function useRouteDataContext<
     routes,
     routeData: routeDataInit,
 }: Props<TStaticRoute, TGlobalData, TRoute>): RouteDataContextType<TStaticRoute, TGlobalData, TRoute> {
-    const routeDataStore = useStore<StaticRouteBaseGetData<TRoute> | null>(routeDataInit);
+    const routeDataStore = useStore<RouteData<TRoute> | null>(routeDataInit);
 
     const routeData = useStoreState(routeDataStore);
 
@@ -45,7 +45,7 @@ export function useRouteDataContext<
             return m;
         }, {}),
         routeDataStore: routeDataStore,
-        routeData: routeData as StaticRouteBaseGetData<TRoute>,
+        routeData: routeData as RouteData<TRoute>,
     };
 }
 
