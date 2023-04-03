@@ -9,16 +9,22 @@ import { useStaticDataContext } from "./staticDataContext.js";
 interface Props<TStaticRoute extends StaticRouteBase<any, any>, TGlobalData> {
     route: TStaticRoute;
     element: JSX.Element;
+    wrapper: React.FC<{ route: TStaticRoute; children: JSX.Element }>;
     loader: JSX.Element;
     error: (error: DatasourceStateError) => JSX.Element;
     routes: TStaticRoute[];
     globalData: TGlobalData;
 }
 
-export function StaticDataProvider<
-    TStaticRoute extends StaticRouteBase<any, any>,
-    TGlobalData,
->({ route, element, loader, error, routes, globalData }: Props<TStaticRoute, TGlobalData>) {
+export function StaticDataProvider<TStaticRoute extends StaticRouteBase<any, any>, TGlobalData>({
+    route,
+    element,
+    loader,
+    error,
+    routes,
+    globalData,
+    wrapper,
+}: Props<TStaticRoute, TGlobalData>) {
     const staticDataContext = useStaticDataContext();
     const routeDataContext = useRouteDataContext<TStaticRoute, TGlobalData, TStaticRoute>({
         globalData,
@@ -47,13 +53,17 @@ export function StaticDataProvider<
         }
     }, [dsRouteDataState.state]);
 
-    if (dsRouteDataState.state === "error") {
-        return error(dsRouteDataState);
-    }
-
-    if (dsRouteDataState.state === "pending" || routeDataContext.routeData === null) {
-        return loader;
-    }
-
-    return <RouteDataContext.Provider value={routeDataContext}>{element}</RouteDataContext.Provider>;
+    return (
+        <RouteDataContext.Provider value={routeDataContext}>
+            {wrapper({
+                route,
+                children:
+                    dsRouteDataState.state === "error"
+                        ? error(dsRouteDataState)
+                        : dsRouteDataState.state === "pending" || routeDataContext.routeData === null
+                        ? loader
+                        : element,
+            })}
+        </RouteDataContext.Provider>
+    );
 }
