@@ -5,7 +5,7 @@ import { useRouteData } from "./routeDataContext.js";
 
 interface Props {
     className?: string;
-    children?: JSX.Element | string;
+    children?: JSX.Element | string | null | JSX.Element[];
     to: string | { id: string };
     onClick?: () => void;
 }
