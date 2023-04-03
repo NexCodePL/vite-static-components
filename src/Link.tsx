@@ -3,15 +3,28 @@ import { Link as LinkRaw } from "react-router-dom";
 import { StaticRouteBase } from "@nexcodepl/vite-static";
 import { useRouteData } from "./routeDataContext.js";
 
-interface Props {
+export interface LinkProps {
     className?: string;
     children?: JSX.Element | string | null | JSX.Element[];
     to: string | { id: string };
     onClick?: () => void;
 }
 
-export const Link: React.FC<Props> = ({ className, children, to, onClick }) => {
+export type LinkComponent = typeof Link;
+
+export const Link: React.FC<LinkProps> = ({ className, children, to, onClick }) => {
     const routeData = useRouteData();
+
+    // return LinkRaw({
+    //     to: getLink(to, routeData?.routesMap),
+    //     className: className,
+    //     onClick: () => {
+    //         if (onClick) {
+    //             onClick();
+    //         }
+    //     },
+    //     children: children,
+    // });
 
     return (
         <LinkRaw
