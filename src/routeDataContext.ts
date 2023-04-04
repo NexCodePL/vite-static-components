@@ -50,7 +50,6 @@ export function useRouteDataContext<
 }
 
 export type RouteDataContextContextType = React.Context<RouteDataContextType<any, any, any>>;
-export type RouteDataContextProviderType = RouteDataContextContextType['Provider'];
 
 export function getRouteDataContext() {
     return createContext<RouteDataContextType<any, any, any>>({} as RouteDataContextType<any, any, any>);
