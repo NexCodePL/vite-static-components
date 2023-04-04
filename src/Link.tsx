@@ -1,7 +1,7 @@
 import React from "react";
 import { Link as LinkRaw } from "react-router-dom";
 import { StaticRouteBase } from "@nexcodepl/vite-static";
-import { useRouteData } from "./routeDataContext.js";
+import { RouteDataContextContextType, useRouteData } from "./routeDataContext.js";
 
 export interface LinkProps {
     className?: string;
@@ -10,35 +10,28 @@ export interface LinkProps {
     onClick?: () => void;
 }
 
-export type LinkComponent = typeof Link;
+export type LinkComponent = React.FC<LinkProps>;
 
-export const Link: React.FC<LinkProps> = ({ className, children, to, onClick }) => {
-    const routeData = useRouteData();
+export function getLinkComponent(routeDataContext: RouteDataContextContextType): LinkComponent {
+    const Link: React.FC<LinkProps> = ({ className, children, to, onClick }) => {
+        const routeData = useRouteData(routeDataContext);
 
-    // return LinkRaw({
-    //     to: getLink(to, routeData?.routesMap),
-    //     className: className,
-    //     onClick: () => {
-    //         if (onClick) {
-    //             onClick();
-    //         }
-    //     },
-    //     children: children,
-    // });
+        return (
+            <LinkRaw
+                to={getLink(to, routeData?.routesMap)}
+                className={className}
+                onClick={() => {
+                    if (onClick) {
+                        onClick();
+                    }
+                }}>
+                {children}
+            </LinkRaw>
+        );
+    };
 
-    return (
-        <LinkRaw
-            to={getLink(to, routeData?.routesMap)}
-            className={className}
-            onClick={() => {
-                if (onClick) {
-                    onClick();
-                }
-            }}>
-            {children}
-        </LinkRaw>
-    );
-};
+    return Link;
+}
 
 function getLink(to: string | { id: string }, map: Record<string, StaticRouteBase<any, any>>): string {
     if (!to) return "";

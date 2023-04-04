@@ -49,16 +49,19 @@ export function useRouteDataContext<
     };
 }
 
-export const RouteDataContext = createContext<RouteDataContextType<any, any, any>>(
-    {} as RouteDataContextType<any, any, any>
-);
+export type RouteDataContextContextType = React.Context<RouteDataContextType<any, any, any>>;
+export type RouteDataContextProviderType = RouteDataContextContextType['Provider'];
+
+export function getRouteDataContext() {
+    return createContext<RouteDataContextType<any, any, any>>({} as RouteDataContextType<any, any, any>);
+}
 
 export function useRouteData<
     TStaticRoute extends StaticRouteBase<any, any>,
     TGlobalData,
     TRoute extends StaticRouteBase<any, any>
->() {
-    const ctx = useContext(RouteDataContext);
+>(context: RouteDataContextContextType) {
+    const ctx = useContext(context);
 
     return ctx as RouteDataContextType<TStaticRoute, TGlobalData, TRoute>;
 }

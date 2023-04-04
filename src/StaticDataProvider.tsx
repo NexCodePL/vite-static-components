@@ -2,11 +2,12 @@ import { DatasourceStateError, useDatasource } from "@nexcodepl/endpoint-client"
 import { useStoreState } from "@nexcodepl/react-store";
 import { StaticRouteBase } from "@nexcodepl/vite-static";
 import { useEffect } from "react";
-import { RouteDataContext, useRouteDataContext } from "./routeDataContext.js";
+import { RouteDataContextContextType, RouteDataContextProviderType, useRouteDataContext } from "./routeDataContext.js";
 import { EndpointStaticData } from "./Static.endpoint.js";
 import { useStaticDataContext } from "./staticDataContext.js";
 
 interface Props<TStaticRoute extends StaticRouteBase<any, any>, TGlobalData> {
+    RouteDataContextProvider: RouteDataContextProviderType;
     route: TStaticRoute;
     element: JSX.Element;
     wrapper: React.FC<{ route: TStaticRoute; children: JSX.Element }>;
@@ -24,6 +25,7 @@ export function StaticDataProvider<TStaticRoute extends StaticRouteBase<any, any
     routes,
     globalData,
     wrapper,
+    RouteDataContextProvider,
 }: Props<TStaticRoute, TGlobalData>) {
     const staticDataContext = useStaticDataContext();
     const routeDataContext = useRouteDataContext<TStaticRoute, TGlobalData, TStaticRoute>({
@@ -54,7 +56,7 @@ export function StaticDataProvider<TStaticRoute extends StaticRouteBase<any, any
     }, [dsRouteDataState.state]);
 
     return (
-        <RouteDataContext.Provider value={routeDataContext}>
+        <RouteDataContextProvider value={routeDataContext}>
             {wrapper({
                 route,
                 children:
@@ -64,6 +66,6 @@ export function StaticDataProvider<TStaticRoute extends StaticRouteBase<any, any
                         ? loader
                         : element,
             })}
-        </RouteDataContext.Provider>
+        </RouteDataContextProvider>
     );
 }
