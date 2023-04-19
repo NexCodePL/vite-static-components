@@ -10,7 +10,6 @@ export function useHtmlHeadData(context: RouteDataContextContextType) {
     useEffect(() => {
         if (document === undefined) return;
 
-        console.log("html data", htmlData);
         if (!htmlData) return;
 
         if (htmlData.lang) setLang(htmlData.lang);
@@ -50,6 +49,7 @@ function setMeta(meta: HtmlHeadMeta) {
         head.appendChild(newMetaElement);
     } catch (e) {
         console.log("Cannot set meta tag");
+        console.log(e);
     }
 }
 
