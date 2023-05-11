@@ -63,7 +63,9 @@ export function StaticDataProvider<TStaticRoute extends StaticRouteBase<any, any
                 children:
                     dsRouteDataState.state === "error" ? (
                         error(dsRouteDataState)
-                    ) : dsRouteDataState.state === "pending" || routeDataContext.routeData === null ? (
+                    ) : dsRouteDataState.state === "pending" ||
+                      routeDataContext.routeData === null ||
+                      route.id !== routeDataContext.routeData.data?.id ? (
                         loader
                     ) : (
                         <HtmlHeadWrapper routeDataContext={RouteDataContext}>{element}</HtmlHeadWrapper>
