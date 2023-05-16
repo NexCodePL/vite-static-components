@@ -1,4 +1,4 @@
-import { DatasourceStateError, useDatasource } from "@nexcodepl/endpoint-client";
+import { DatasourceState, DatasourceStateError, useDatasource } from "@nexcodepl/endpoint-client";
 import { useStoreState } from "@nexcodepl/react-store";
 import { StaticRouteBase } from "@nexcodepl/vite-static";
 import { useEffect } from "react";
@@ -11,7 +11,7 @@ interface Props<TStaticRoute extends StaticRouteBase<any, any>, TGlobalData> {
     RouteDataContext: RouteDataContextContextType;
     route: TStaticRoute;
     element: JSX.Element;
-    wrapper: React.FC<{ route: TStaticRoute; children: JSX.Element }>;
+    wrapper: React.FC<{ route: TStaticRoute; children: JSX.Element; routeDataState: DatasourceState<any>["state"] }>;
     loader: JSX.Element;
     error: (error: DatasourceStateError) => JSX.Element;
     routes: TStaticRoute[];
@@ -59,6 +59,7 @@ export function StaticDataProvider<TStaticRoute extends StaticRouteBase<any, any
     return (
         <RouteDataContext.Provider value={routeDataContext}>
             {wrapper({
+                routeDataState: dsRouteDataState.state,
                 route,
                 children:
                     dsRouteDataState.state === "error" ? (
