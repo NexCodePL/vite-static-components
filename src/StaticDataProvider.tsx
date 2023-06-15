@@ -16,6 +16,7 @@ interface Props<TStaticRoute extends StaticRouteBase<any, any>, TGlobalData> {
     error: (error: DatasourceStateError) => JSX.Element;
     routes: TStaticRoute[];
     globalData: TGlobalData;
+    basePath?: string;
 }
 
 export function StaticDataProvider<TStaticRoute extends StaticRouteBase<any, any>, TGlobalData>({
@@ -27,6 +28,7 @@ export function StaticDataProvider<TStaticRoute extends StaticRouteBase<any, any
     globalData,
     wrapper,
     RouteDataContext,
+    basePath = "",
 }: Props<TStaticRoute, TGlobalData>) {
     const staticDataContext = useStaticDataContext();
     const routeDataContext = useRouteDataContext<TStaticRoute, TGlobalData, TStaticRoute>({
@@ -36,7 +38,7 @@ export function StaticDataProvider<TStaticRoute extends StaticRouteBase<any, any
         routeData: staticDataContext.getData(route.id),
     });
 
-    const dsRouteData = useDatasource(EndpointStaticData);
+    const dsRouteData = useDatasource({ ...EndpointStaticData, url: basePath + EndpointStaticData.url });
 
     const dsRouteDataState = useStoreState(dsRouteData.state);
 
