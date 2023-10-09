@@ -13,23 +13,35 @@ import {
     StaticDataStorage,
 } from "./staticDataContext.js";
 
-export function mountApp(App: JSX.Element) {
+export function mountApp(App: JSX.Element, disableStrictMode?: boolean) {
     if (import.meta.env.MODE === "development") {
         ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-            <React.StrictMode>
+            disableStrictMode ? (
                 <StaticDataContext.Provider value={staticDataContext()}>
                     <BrowserRouter>{App}</BrowserRouter>
                 </StaticDataContext.Provider>
-            </React.StrictMode>
+            ) : (
+                <React.StrictMode>
+                    <StaticDataContext.Provider value={staticDataContext()}>
+                        <BrowserRouter>{App}</BrowserRouter>
+                    </StaticDataContext.Provider>
+                </React.StrictMode>
+            )
         );
     } else {
         ReactDOM.hydrateRoot(
             document.getElementById("root") as HTMLElement,
-            <React.StrictMode>
+            disableStrictMode ? (
                 <StaticDataContext.Provider value={staticDataContext()}>
                     <BrowserRouter>{App}</BrowserRouter>
                 </StaticDataContext.Provider>
-            </React.StrictMode>
+            ) : (
+                <React.StrictMode>
+                    <StaticDataContext.Provider value={staticDataContext()}>
+                        <BrowserRouter>{App}</BrowserRouter>
+                    </StaticDataContext.Provider>
+                </React.StrictMode>
+            )
         );
     }
 }
