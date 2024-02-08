@@ -7,19 +7,25 @@ import { EndpointStaticData } from "./Static.endpoint.js";
 import { useStaticDataContext } from "./staticDataContext.js";
 import { HtmlHeadWrapper } from "./HtmlHeadWrapper.js";
 
-interface Props<TStaticRoute extends StaticRouteBase<any, any>, TGlobalData> {
+type ElementWithProps<TProps> = (props: TProps) => JSX.Element;
+
+interface Props<TStaticRoute extends StaticRouteBase<any, any>, TGlobalData, TElementProps> {
     RouteDataContext: RouteDataContextContextType;
     route: TStaticRoute;
-    element: JSX.Element;
-    wrapper: React.FC<{ route: TStaticRoute; children: JSX.Element; routeDataState: DatasourceState<any>["state"] }>;
-    loader: JSX.Element;
-    error: (error: DatasourceStateError) => JSX.Element;
+    element: ElementWithProps<TElementProps>;
+    wrapper: React.FC<{
+        route: TStaticRoute;
+        children: ElementWithProps<TElementProps>;
+        routeDataState: DatasourceState<any>["state"];
+    }>;
+    loader: ElementWithProps<TElementProps>;
+    error: (error: DatasourceStateError, props: TElementProps) => JSX.Element;
     routes: TStaticRoute[];
     globalData: TGlobalData;
     basePath?: string;
 }
 
-export function StaticDataProvider<TStaticRoute extends StaticRouteBase<any, any>, TGlobalData>({
+export function StaticDataProvider<TStaticRoute extends StaticRouteBase<any, any>, TGlobalData, TElementProps>({
     route,
     element,
     loader,
@@ -29,7 +35,7 @@ export function StaticDataProvider<TStaticRoute extends StaticRouteBase<any, any
     wrapper,
     RouteDataContext,
     basePath = "",
-}: Props<TStaticRoute, TGlobalData>) {
+}: Props<TStaticRoute, TGlobalData, TElementProps>) {
     const staticDataContext = useStaticDataContext();
     const routeDataContext = useRouteDataContext<TStaticRoute, TGlobalData, TStaticRoute>({
         globalData,
@@ -63,15 +69,15 @@ export function StaticDataProvider<TStaticRoute extends StaticRouteBase<any, any
             {wrapper({
                 routeDataState: dsRouteDataState.state,
                 route,
-                children:
+                children: props =>
                     dsRouteDataState.state === "error" ? (
-                        error(dsRouteDataState)
+                        error(dsRouteDataState, props)
                     ) : dsRouteDataState.state === "pending" ||
                       routeDataContext.routeData === null ||
                       route.id !== routeDataContext.routeData.data?.id ? (
-                        loader
+                        loader(props)
                     ) : (
-                        <HtmlHeadWrapper routeDataContext={RouteDataContext}>{element}</HtmlHeadWrapper>
+                        <HtmlHeadWrapper routeDataContext={RouteDataContext}>{element(props)}</HtmlHeadWrapper>
                     ),
             })}
         </RouteDataContext.Provider>
